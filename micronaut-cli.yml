@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: in.praj.examsys
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle_kotlin
+features: [annotation-api, app-name, aws-lambda, graalvm, gradle, java, java-application, junit, logback, readme, shade, yaml]
