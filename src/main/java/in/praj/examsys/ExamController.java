@@ -1,8 +1,6 @@
 package in.praj.examsys;
 
-import in.praj.examsys.bean.Exam;
-import in.praj.examsys.bean.ExamOpResult;
-import in.praj.examsys.bean.ExamSummary;
+import in.praj.examsys.bean.*;
 import io.micronaut.http.annotation.*;
 
 import javax.inject.Inject;
@@ -48,5 +46,44 @@ public class ExamController {
         return (examRepo.deleteExam(examId))
                 ? new ExamOpResult(true, null)
                 : new ExamOpResult(false, null);
+    }
+
+    @Get("{examId}/start")
+    public Exam startExam(@PathVariable String examId) {
+        return examRepo.findExam(examId)
+                .map(exam -> {
+                    exam.getContent().forEach(s -> {
+                        s.getQuestions().forEach(q -> q.setAnswer(null));
+                    });
+                    return exam;
+                }).orElse(null);
+    }
+
+    @Get("{examId}/submit")
+    public ExamScore submitExam(@PathVariable String examId, @Body Exam submitted) {
+        return examRepo.findExam(examId)
+                .map(exam -> {
+                    var subIter  = submitted.getContent().iterator();
+                    var examIter = exam.getContent().iterator();
+                    var score = 0;
+
+                    while (subIter.hasNext() && examIter.hasNext()) {
+                        score += getSectionScore(subIter.next(), examIter.next());
+                    }
+
+                    return new ExamScore(exam.getId(), score);
+                }).orElse(null);
+    }
+
+    private int getSectionScore(ExamSection submitted, ExamSection correct) {
+        var subIter = submitted.getQuestions().iterator();
+        var corIter = correct.getQuestions().iterator();
+        var score = 0;
+
+        while (subIter.hasNext() && corIter.hasNext()) {
+            if (subIter.next().getAnswer().equals(corIter.next().getAnswer()))
+                score++;
+        }
+        return score;
     }
 }
