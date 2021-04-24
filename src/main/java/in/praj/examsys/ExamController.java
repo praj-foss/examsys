@@ -31,10 +31,22 @@ public class ExamController {
 
     @Post
     public ExamOpResult postExam(@Body Exam exam) {
-        if (examRepo.insertExam(exam)) {
-            return new ExamOpResult(true, new ExamSummary(exam));
-        } else {
-            return new ExamOpResult(false, null);
-        }
+        return (examRepo.insertExam(exam))
+                ? new ExamOpResult(true, new ExamSummary(exam))
+                : new ExamOpResult(false, null);
+    }
+
+    @Put("{examId}")
+    public ExamOpResult putExam(@PathVariable String examId, @Body Exam exam) {
+        return (examRepo.replaceExam(examId, exam))
+                ? new ExamOpResult(true, new ExamSummary(exam))
+                : new ExamOpResult(false, null);
+    }
+
+    @Delete("{examId}")
+    public ExamOpResult deleteExam(@PathVariable String examId) {
+        return (examRepo.deleteExam(examId))
+                ? new ExamOpResult(true, null)
+                : new ExamOpResult(false, null);
     }
 }

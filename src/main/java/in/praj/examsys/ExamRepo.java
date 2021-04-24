@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import in.praj.examsys.bean.Exam;
 import io.micronaut.context.annotation.Context;
+import org.bson.conversions.Bson;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -28,16 +29,29 @@ public class ExamRepo {
     }
 
     public Optional<Exam> findExam(String examId) {
-        return Optional.ofNullable(exams.find(Filters.eq("_id", examId)).first());
+        return Optional.ofNullable(exams.find(idFilter(examId)).first());
     }
 
     public List<Exam> findAll() {
         return exams.find().into(new ArrayList<>());
     }
 
+    public boolean replaceExam(String examId, Exam exam) {
+        return exams.replaceOne(idFilter(examId), exam)
+                .wasAcknowledged();
+    }
+
+    public boolean deleteExam(String examId) {
+        return exams.deleteOne(idFilter(examId)).wasAcknowledged();
+    }
+
     @PostConstruct
     private void init() {
         exams = client.getDatabase(System.getenv(MONGO_DB))
                 .getCollection(MONGO_COLL, Exam.class);
+    }
+
+    private static Bson idFilter(String id) {
+        return Filters.eq("_id", id);
     }
 }
