@@ -5,11 +5,13 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import in.praj.examsys.bean.Exam;
-import in.praj.examsys.bean.ExamOpResult;
 import io.micronaut.context.annotation.Context;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Context
 public class ExamRepo {
@@ -20,19 +22,17 @@ public class ExamRepo {
     private MongoClient client;
     private MongoCollection<Exam> exams;
 
-    public ExamOpResult insertExam(Exam exam) {
+    public boolean insertExam(Exam exam) {
         exam.setId(NanoIdUtils.randomNanoId());
-        if (exams.insertOne(exam).wasAcknowledged()) {
-            return new ExamOpResult(true, exam);
-        } else {
-            exam.setId(null);
-            return new ExamOpResult(false, null);
-        }
+        return exams.insertOne(exam).wasAcknowledged();
     }
 
-    public ExamOpResult findExam(String examId) {
-        var found = exams.find(Filters.eq("_id", examId)).first();
-        return new ExamOpResult(found != null, found);
+    public Optional<Exam> findExam(String examId) {
+        return Optional.ofNullable(exams.find(Filters.eq("_id", examId)).first());
+    }
+
+    public List<Exam> findAll() {
+        return exams.find().into(new ArrayList<>());
     }
 
     @PostConstruct

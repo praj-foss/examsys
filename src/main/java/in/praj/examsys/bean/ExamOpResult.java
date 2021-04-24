@@ -1,24 +1,25 @@
 package in.praj.examsys.bean;
 
 import io.micronaut.core.annotation.Introspected;
+
 import javax.annotation.concurrent.Immutable;
 
 @Introspected
 @Immutable
 public class ExamOpResult {
     private final Boolean success;
-    private final Exam exam;
+    private final ExamSummary summary;
 
-    public ExamOpResult(Boolean success, Exam exam) {
+    public ExamOpResult(Boolean success, ExamSummary exam) {
         this.success = success;
-        this.exam = exam;
+        this.summary = exam;
     }
 
     public Boolean getSuccess() {
         return success;
     }
 
-    public Exam getExam() {
-        return exam;
+    public ExamSummary getSummary() {
+        return summary;
     }
 }
