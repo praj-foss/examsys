@@ -23,8 +23,39 @@ code {
 
 table {
   border-collapse: collapse;
+  margin-bottom: 1.5rem;
 }
 th, td {
   border: 1px solid black;
   padding: 0.4rem 1rem;
+}
+
+.exam-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.exam-section {
+  margin-bottom: 2rem;
+}
+
+.exam-question {
+  border: 1px solid #888888;
+  border-radius: 4px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+.exam-question .question-options {
+  margin-bottom: 1rem;
+}
+
+.score-view {
+  display: flex;
+  flex-direction: row;
+}
+.score-view button {
+  margin-left: 2rem;
 }

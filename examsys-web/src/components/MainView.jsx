@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const MainView = ({apiUrl, examList, setExamList}) => {
+const MainView = ({setExamView, apiUrl, examList, setExamList, initAnswers}) => {
     useEffect(() => {
         fetch(apiUrl + "/exams")
                 .then(data => data.json())
@@ -8,11 +8,19 @@ const MainView = ({apiUrl, examList, setExamList}) => {
                 .catch(err => console.log(err));
     });
 
+    function startExam(examId) {
+        fetch(apiUrl + "/exams/" + examId + "/start")
+                .then(data => data.json())
+                .then(res => initAnswers(res))
+                .catch(err => console.log(err))
+                .finally(() => setExamView());
+    }
+
     function getRows() {
         return examList.map((es, index) => {
             return (
                 <tr key={index}>
-                    <td><button>Start</button></td>
+                    <td><button onClick={() => startExam(es.id)}>Start</button></td>
                     <td>{es.name}</td>
                     <td>{es.duration}</td>
                     <td>{es.questions}</td>
@@ -38,6 +46,7 @@ const MainView = ({apiUrl, examList, setExamList}) => {
                     {getRows()}
                 </tbody>
             </table>
+            <div><button>Create</button></div>
         </div>
     );
 }

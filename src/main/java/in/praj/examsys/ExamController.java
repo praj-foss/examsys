@@ -59,7 +59,7 @@ public class ExamController {
                 }).orElse(null);
     }
 
-    @Get("{examId}/submit")
+    @Post("{examId}/submit")
     public ExamScore submitExam(@PathVariable String examId, @Body Exam submitted) {
         return examRepo.findExam(examId)
                 .map(exam -> {
