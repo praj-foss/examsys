@@ -1,4 +1,20 @@
-const ExamView = ({apiUrl, exam, answers, setAnswers, score, setScore, setMainView}) => {
+import { useEffect } from "react";
+
+const ExamView = ({exam, timer, setAnswers, score, submitExam, setMainView}) => {
+    useEffect(() => {
+        timer.addEventListener("targetAchieved", submitExam);
+        const [mm, ss] = exam.duration.split(":");
+        timer.start({
+            countdown: true, 
+            startValues: [0, parseInt(ss), parseInt(mm), 0, 0]
+        });
+
+        return () => { 
+            if (timer.isRunning) timer.stop(); 
+            timer.removeEventListener("targetAchieved");
+        };
+    }, []);
+
     function selectOption(secIndex, quesIndex, value) {
         setAnswers(prev => {
             prev.content[secIndex].questions[quesIndex].answer = value;
@@ -45,31 +61,21 @@ const ExamView = ({apiUrl, exam, answers, setAnswers, score, setScore, setMainVi
         });
     }
 
-    function submitExam() {
-        console.log(answers);
-
-        fetch(apiUrl + "/exams/" + exam.id + "/submit", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(answers)
-        })
-            .then(data => data.json())
-            .then(res => setScore(res.score))
-            .catch(err => console.log(err));
+    function onSubmitButton() {
+        if (timer.isRunning()) timer.pause();
+        submitExam();
     }
 
     function getScoreAndSubmit() {
-        if (score) {
+        if (score != -1) {
             return (
                 <div className="score-view">
                     <h2>Score: {score} </h2>
-                    <button onClick={() => setMainView()}>Back</button>
+                    <button onClick={setMainView}>Back</button>
                 </div>
             );
         } else {
-            return <button onClick={() => submitExam()}>Submit</button>;
+            return <button onClick={onSubmitButton}>Submit</button>;
         }
     }
 
@@ -77,7 +83,7 @@ const ExamView = ({apiUrl, exam, answers, setAnswers, score, setScore, setMainVi
         <div className="exam-view">
             <div className="exam-header">
                 <h2>{exam.name}</h2>
-                <h2>{exam.duration}</h2>
+                <h2>{timer.getTimeValues().toString().slice(3)}</h2>
                 {getScoreAndSubmit()}                
             </div>
             <div className="exam-content">

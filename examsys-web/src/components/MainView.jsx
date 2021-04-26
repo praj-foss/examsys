@@ -6,7 +6,7 @@ const MainView = ({setExamView, apiUrl, examList, setExamList, initAnswers}) => 
                 .then(data => data.json())
                 .then(res => setExamList(res))
                 .catch(err => console.log(err));
-    });
+    }, []);
 
     function startExam(examId) {
         fetch(apiUrl + "/exams/" + examId + "/start")
@@ -37,7 +37,7 @@ const MainView = ({setExamView, apiUrl, examList, setExamList, initAnswers}) => 
                     <tr>
                         <th></th>
                         <th>Exam</th>
-                        <th>Duration</th>
+                        <th>Duration (mm:ss)</th>
                         <th>Questions</th>
                         <th></th>
                     </tr>
