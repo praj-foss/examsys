@@ -81,7 +81,7 @@ const ExamView = ({exam, timer, setAnswers, score, submitExam, setMainView}) => 
 
     return (
         <div className="exam-view">
-            <div className="exam-header">
+            <div className="exam-header hbox space-between">
                 <h2>{exam.name}</h2>
                 <h2>{timer.getTimeValues().toString().slice(3)}</h2>
                 {getScoreAndSubmit()}                

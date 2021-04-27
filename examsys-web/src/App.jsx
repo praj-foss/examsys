@@ -90,7 +90,8 @@ function App() {
                                            setMainView={setMainView} /> }
 
             { view === "editor" && <EditorView apiUrl={API_URL}
-                                               exam={exam} /> }
+                                               exam={exam}
+                                               setExam={setExam} /> }
         </div>
     );
 }

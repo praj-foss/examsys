@@ -30,10 +30,15 @@ th, td {
   padding: 0.4rem 1rem;
 }
 
-.exam-header {
+.hbox {
   display: flex;
   flex-direction: row;
+}
+.hbox.space-between {
   justify-content: space-between;
+}
+
+.exam-header {
   margin-bottom: 2rem;
 }
 
@@ -46,6 +51,7 @@ th, td {
   border-radius: 4px;
   margin: 1rem auto;
   padding: 0 1rem;
+  padding-top: 1rem;
 }
 
 .exam-question .question-options {
