@@ -50,11 +50,10 @@ th, td {
   border: 1px solid #888888;
   border-radius: 4px;
   margin: 1rem auto;
-  padding: 0 1rem;
-  padding-top: 1rem;
+  padding: 1rem;
 }
 
-.exam-question .question-options {
+.exam-question {
   margin-bottom: 1rem;
 }
 

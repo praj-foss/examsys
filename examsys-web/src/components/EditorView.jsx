@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import update from "immutability-helper";
 
-const EditorView = ({apiUrl, exam, setExam}) => {
+const EditorView = ({exam, setExam, setMainView, saveEditedExam}) => {
     function template() {
         return {
             heading: "Heading",
@@ -11,25 +11,6 @@ const EditorView = ({apiUrl, exam, setExam}) => {
                 answer: 1
             }]
         };
-    }
-
-    const [examInfo, setExamInfo] = useState({
-        name: exam.name,
-        mm: exam.duration.split(":")[0],
-        ss: exam.duration.split(":")[1]
-    });
-
-    function setExamName(e) {
-        setExamInfo(info => update(info, 
-            {name: {$set: e.target.value}}));
-    }
-    function setMinutes(e) {
-        setExamInfo(info => update(info, 
-            {mm: {$set: e.target.value}}));
-    }
-    function setSeconds(e) {
-        setExamInfo(info => update(info, 
-            {ss: {$set: e.target.value}}));
     }
 
     function getOption(secIndex, quesIndex, optIndex) {
@@ -88,11 +69,16 @@ const EditorView = ({apiUrl, exam, setExam}) => {
         setExam(ex => update(ex, 
             {content: {[secIndex]: {questions: {$push: [tmp]}}}}));
     }
+    function deleteQuestion(secIndex, quesIndex) {
+        setExam(ex => update(ex, 
+            {content: {[secIndex]: {questions: {$splice: [[quesIndex, 1]]}}}}));
+    }
 
     function getQuestions(sec, secIndex) {
         const questionList = sec.questions.map((ques, index) => {
             return (
                 <div className="exam-question" key={index}>
+                    <button onClick={() => deleteQuestion(secIndex, index)}>Delete Question</button><br/>
                     <textarea cols="50" 
                               rows="4" 
                               value={getQuestion(secIndex, index)}
@@ -113,16 +99,32 @@ const EditorView = ({apiUrl, exam, setExam}) => {
         );
     }
 
+    function getHeading(secIndex) {
+        return exam.content[secIndex].heading;
+    }
+    function setHeading(secIndex, value) {
+        setExam(ex => update(ex, 
+            {content: {[secIndex]: {heading: {$set: value}}}}));
+    }
+
     function newSection() {
         setExam(ex => update(ex, 
             {content: {$push: [template()]}}));
+    }
+    function deleteSection(secIndex) {
+        setExam(ex => update(ex,
+            {content: {$splice: [[secIndex, 1]]}}));
     }
 
     function getSections() {
         const contentList = exam.content.map((sec, index) => {
             return (
                 <div className="exam-section" key={index}>
-                    <h4 className="section-heading">{sec.heading}</h4>
+                    <h4 className="section-heading">Section: </h4>
+                    <input type="text"
+                           value={getHeading(index)}
+                           onChange={e => setHeading(index, e.target.value)}/>
+                    <button onClick={() => deleteSection(index)}>Delete Section</button>
                     {getQuestions(sec, index)}
                 </div>
             );
@@ -136,21 +138,49 @@ const EditorView = ({apiUrl, exam, setExam}) => {
         );
     }
 
+    const [duration, setDuration] = useState({mm: 1, ss: 0});
+    useEffect(() => {
+        const [m, s] = exam.duration.split(":");
+        setDuration(dur => update(dur, {
+            mm: {$set: m},
+            ss: {$set: s}
+        }));
+    }, []);
+
+    function setExamName(e) {
+        setExam(ex => update(ex, {name: {$set: e.target.value}}));
+    }
+
+    function setMinutes(e) {
+        setDuration(dur => update(dur, 
+            {mm: {$set: e.target.value}}));
+    }
+    function setSeconds(e) {
+        setDuration(dur => update(dur, 
+            {ss: {$set: e.target.value}}));
+    }
+
+    function onSave() {
+        const dur = `${duration.mm}:${duration.ss}`;
+        setExam(ex => update(ex, {duration: {$set: dur}}));
+        saveEditedExam();
+    }
+
     return (
         <div className="editor-view">
             <div className="exam-header hbox space-between">
                 <div className="hbox">
                     <h3>Exam: </h3>
-                    <input type="text" name="exam" placeholder="Title" value={examInfo.name} onChange={setExamName}/>
+                    <input type="text" name="exam" placeholder="Title" value={exam.name} onChange={setExamName}/>
                 </div>
                 <div className="hbox">
                     <h3>Duration: </h3>
-                    <input type="number" name="exam" min="1" max="59" placeholder="mm" value={examInfo.mm} onChange={setMinutes}/>
-                    <input type="number" name="exam" min="0" max="59" placeholder="ss" value={examInfo.ss} onChange={setSeconds}/>
+                    <input type="number" name="exam" min="1" max="59" placeholder="mm" value={duration.mm} onChange={setMinutes}/>
+                    <input type="number" name="exam" min="0" max="59" placeholder="ss" value={duration.ss} onChange={setSeconds}/>
                 </div>
                 <div className="hbox">
-                    <button>Save</button>
-                    <button>Discard</button>
+                    <button onClick={onSave}>Save</button>
+                    <button onClick={setMainView}>Discard</button>
                 </div>
             </div>
             {getSections()}

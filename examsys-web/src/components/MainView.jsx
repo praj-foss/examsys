@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const MainView = ({apiUrl, examList, setExamList, startExam, editExam}) => {
+const MainView = ({apiUrl, examList, setExamList, startExam, editExam, createExam, deleteExam}) => {
     useEffect(() => {
         fetch(apiUrl + "/exams")
                 .then(data => data.json())
@@ -18,13 +18,13 @@ const MainView = ({apiUrl, examList, setExamList, startExam, editExam}) => {
                     <td>{es.questions}</td>
                     <td>
                         <button onClick={() => editExam(es.id)}>Edit</button>
-                        <button>Delete</button>
+                        <button onClick={() => deleteExam(es.id, index)}>Delete</button>
                     </td>
                 </tr>
             );
         });
     }
-    
+
     return (
         <div className="main-view">
             <table>
@@ -41,7 +41,7 @@ const MainView = ({apiUrl, examList, setExamList, startExam, editExam}) => {
                     {getRows()}
                 </tbody>
             </table>
-            <div><button>Create</button></div>
+            <div><button onClick={createExam}>Create</button></div>
         </div>
     );
 }

@@ -3,6 +3,7 @@ import MainView from "./components/MainView";
 import EditorView from "./components/EditorView";
 import ExamView from "./components/ExamView";
 import useTimer from "easytimer-react-hook";
+import update from "immutability-helper";
 
 function App() {
     const API_URL = "http://praj-aspire:8080";
@@ -20,10 +21,10 @@ function App() {
     }
 
     function setMainView() {
+        setView("main");
         setExam(undefined);
         setAnswers(undefined);
         setScore(-1);
-        setView("main");
     }
 
     function setEditorView() {
@@ -60,8 +61,7 @@ function App() {
         })
             .then(data => data.json())
             .then(res => setScore(res.score))
-            .catch(err => console.log(err))
-            .finally(() => console.log("Result: " + score));
+            .catch(err => console.log(err));
     }
 
     function editExam(examId) {
@@ -72,6 +72,48 @@ function App() {
             .finally(setEditorView);
     }
 
+    function createExam() {
+        setExam({
+            name: "Untitled",
+            duration: "1:00",
+            content: []
+        })
+        setEditorView();
+    }
+
+    function deleteExam(examId, index) {
+        fetch(API_URL + "/exams/" + examId, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .catch(err => console.log(err))
+            .finally(() => {
+                setExamList(el => update(el, {$splice: [[index, 1]]}));
+            });
+    }
+
+    function saveEditedExam() {
+        let url = API_URL + "/exams";
+        let method = "POST";
+        
+        if (exam.id) {
+            url += "/" + exam.id;
+            method = "PUT";
+        }
+        
+        fetch(url, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(exam)
+        })
+            .catch(err => console.log(err))
+            .finally(setMainView);
+    }
+
     return (
         <div className="app">
             <header className="app-header"><h2>Examsys</h2></header>
@@ -80,7 +122,9 @@ function App() {
                                            examList={examList} 
                                            setExamList={setExamList}
                                            startExam={startExam}
-                                           editExam={editExam} /> }
+                                           editExam={editExam}
+                                           createExam={createExam}
+                                           deleteExam={deleteExam} /> }
 
             { view === "exam" && <ExamView exam={exam}
                                            timer={timer}
@@ -89,9 +133,10 @@ function App() {
                                            submitExam={submitExam} 
                                            setMainView={setMainView} /> }
 
-            { view === "editor" && <EditorView apiUrl={API_URL}
-                                               exam={exam}
-                                               setExam={setExam} /> }
+            { view === "editor" && <EditorView exam={exam}
+                                               setExam={setExam}
+                                               setMainView={setMainView}
+                                               saveEditedExam={saveEditedExam} /> }
         </div>
     );
 }
