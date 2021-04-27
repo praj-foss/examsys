@@ -67,7 +67,7 @@ const ExamView = ({exam, timer, setAnswers, score, submitExam, setMainView}) => 
     }
 
     function getScoreAndSubmit() {
-        if (score != -1) {
+        if (score !== -1) {
             return (
                 <div className="score-view">
                     <h2>Score: {score} </h2>

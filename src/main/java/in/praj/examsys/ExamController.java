@@ -27,6 +27,11 @@ public class ExamController {
                 .orElse(null);
     }
 
+    @Get("{examId}/edit")
+    public Exam editExam(@PathVariable String examId) {
+        return examRepo.findExam(examId).orElse(null);
+    }
+
     @Post
     public ExamOpResult postExam(@Body Exam exam) {
         return (examRepo.insertExam(exam))

@@ -15,6 +15,21 @@ function App() {
     const [score, setScore] = useState(-1);
     const [timer] = useTimer();
 
+    function setExamView() {
+        setView("exam");
+    }
+
+    function setMainView() {
+        setExam(undefined);
+        setAnswers(undefined);
+        setScore(-1);
+        setView("main");
+    }
+
+    function setEditorView() {
+        setView("editor");
+    }
+
     function initAnswers(ex) {
         setAnswers({
             id: ex.id,
@@ -25,6 +40,14 @@ function App() {
             })
         });
         setExam(ex);
+    }
+
+    function startExam(examId) {
+        fetch(API_URL + "/exams/" + examId + "/start")
+                .then(data => data.json())
+                .then(res => initAnswers(res))
+                .catch(err => console.log(err))
+                .finally(() => setExamView());
     }
 
     function submitExam() {
@@ -41,26 +64,23 @@ function App() {
             .finally(() => console.log("Result: " + score));
     }
 
-    function setExamView() {
-        setView("exam");
-    }
-
-    function setMainView() {
-        setExam(undefined);
-        setAnswers(undefined);
-        setScore(undefined);
-        setView("main");
+    function editExam(examId) {
+        fetch(API_URL + "/exams/" + examId + "/edit")
+            .then(data => data.json())
+            .then(res => setExam(res))
+            .catch(err => console.log(err))
+            .finally(setEditorView);
     }
 
     return (
         <div className="app">
             <header className="app-header"><h2>Examsys</h2></header>
 
-            { view === "main" && <MainView setExamView={setExamView} 
-                                           apiUrl={API_URL} 
+            { view === "main" && <MainView apiUrl={API_URL} 
                                            examList={examList} 
                                            setExamList={setExamList}
-                                           initAnswers={initAnswers} /> }
+                                           startExam={startExam}
+                                           editExam={editExam} /> }
 
             { view === "exam" && <ExamView exam={exam}
                                            timer={timer}
@@ -69,7 +89,8 @@ function App() {
                                            submitExam={submitExam} 
                                            setMainView={setMainView} /> }
 
-            { view === "editor" && <EditorView apiUrl={API_URL} /> }
+            { view === "editor" && <EditorView apiUrl={API_URL}
+                                               exam={exam} /> }
         </div>
     );
 }

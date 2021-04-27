@@ -1,20 +1,12 @@
 import { useEffect } from "react";
 
-const MainView = ({setExamView, apiUrl, examList, setExamList, initAnswers}) => {
+const MainView = ({apiUrl, examList, setExamList, startExam, editExam}) => {
     useEffect(() => {
         fetch(apiUrl + "/exams")
                 .then(data => data.json())
                 .then(res => setExamList(res))
                 .catch(err => console.log(err));
     }, []);
-
-    function startExam(examId) {
-        fetch(apiUrl + "/exams/" + examId + "/start")
-                .then(data => data.json())
-                .then(res => initAnswers(res))
-                .catch(err => console.log(err))
-                .finally(() => setExamView());
-    }
 
     function getRows() {
         return examList.map((es, index) => {
@@ -24,7 +16,10 @@ const MainView = ({setExamView, apiUrl, examList, setExamList, initAnswers}) => 
                     <td>{es.name}</td>
                     <td>{es.duration}</td>
                     <td>{es.questions}</td>
-                    <td><button>Edit</button> <button>Delete</button></td>
+                    <td>
+                        <button onClick={() => editExam(es.id)}>Edit</button>
+                        <button>Delete</button>
+                    </td>
                 </tr>
             );
         });
