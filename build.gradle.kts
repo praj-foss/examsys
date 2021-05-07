@@ -32,7 +32,6 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 }
 
-
 application {
     mainClass.set("in.praj.examsys.Application")
 }
@@ -41,5 +40,14 @@ java {
     targetCompatibility = JavaVersion.toVersion("11")
 }
 
+val copyClient = tasks.register<Copy>("copyClient") {
+    doFirst {
+        mkdir(buildDir.resolve("resources/main/www"))
+    }
+    from(layout.projectDirectory.dir("examsys-web/build"))
+    into(layout.buildDirectory.dir("resources/main/www"))
+}
 
-
+tasks.register("shadowJarWithClient") {
+    dependsOn(copyClient, tasks.named("shadowJar"))
+}

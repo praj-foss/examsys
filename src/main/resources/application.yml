@@ -1,4 +1,18 @@
 micronaut:
   application:
     name: examsys
+  server:
+    port: ${PORT}
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedOrigins:
+            - ${ORIGIN}
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/**"
+        paths: "classpath:www"
 mongodb.uri: mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
