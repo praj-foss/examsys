@@ -1,14 +1,16 @@
 import { useState } from "react";
+import Header from "./components/Header";
 import MainView from "./components/MainView";
 import EditorView from "./components/EditorView";
 import ExamView from "./components/ExamView";
 import useTimer from "easytimer-react-hook";
 import update from "immutability-helper";
+import ListView from "./views/ListView";
 
 function App() {
     const API_URL = process.env.REACT_APP_ORIGIN;
 
-    const [view, setView] = useState("main");
+    const [view, setView] = useState("list");
     const [examList, setExamList] = useState([]);
 
     const [exam, setExam] = useState();
@@ -116,7 +118,9 @@ function App() {
 
     return (
         <div className="app">
-            <header className="app-header"><h2>Examsys</h2></header>
+            <Header />
+
+            { view === "list" && <ListView apiUrl={API_URL} /> }
 
             { view === "main" && <MainView apiUrl={API_URL} 
                                            examList={examList} 
