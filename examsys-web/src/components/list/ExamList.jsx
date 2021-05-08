@@ -1,13 +1,9 @@
-import { useState } from "react";
-
 function ExamList({examList}) {
-    const [hoveredRow, setHoveredRow] = useState(-1);
-
-    function getExamCell(exam, rowIndex) {
+    function getExamCell(exam) {
         return (
             <td className="cell-exam">
                 {exam.name}
-                <div className={`exam-actions ${hoveredRow === rowIndex ? "" : "hidden"}`}>
+                <div className="exam-actions">
                     <button>Start</button>
                     <button>Edit</button>
                     <button>Delete</button>
@@ -19,11 +15,7 @@ function ExamList({examList}) {
     function getRows() {
         return examList.map((item, index) => {
             return (
-                <tr key={index}
-                    className="list-row"
-                    onMouseEnter={() => setHoveredRow(index)} 
-                    onMouseLeave={() => {if (hoveredRow === index) setHoveredRow(-1);}}>
-
+                <tr key={index} className="list-row">
                     { getExamCell(item, index) }
                     <td>{item.duration}</td>
                     <td>{item.questions}</td>
@@ -44,6 +36,11 @@ function ExamList({examList}) {
             <tbody>
                 { getRows() }
             </tbody>
+            <tfoot>
+                <tr>
+                    <td><button>Create</button></td>
+                </tr>
+            </tfoot>
         </table>
     );
 }

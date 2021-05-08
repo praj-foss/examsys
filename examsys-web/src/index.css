@@ -26,10 +26,6 @@ code {
   margin: auto;
 }
 
-.hidden {
-  visibility: hidden;
-}
-
 /* HEADER */
 .app-header {
   display: flex;
@@ -68,21 +64,40 @@ code {
   background-color: var(--primary-0);
 }
 
+.exam-list button {
+  background-color: var(--primary-1);
+  color: white;
+  font-size: 0.8em;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  border: 0;
+  border-radius: 4px;
+  padding: 0.3rem 0;
+  width: 4.5rem;
+}
+.exam-list button:hover {
+  background-color: var(--primary-2);
+}
+
+/* LIST VIEW - CELL */
 .cell-exam {
   position: relative;  
 }
 .exam-actions {
   position: absolute;
+  display: none;
+  box-sizing: border-box;
   top: 0;
-  right: 1rem;
-  padding: 0.4rem 1rem;
+  right: 0;
+  height: 100%;
+  align-items: center;
   z-index: 5;
 }
+.exam-list .list-row:hover .exam-actions {
+  display: flex;
+}
 .exam-actions button {
-  width: 4.5rem;
   margin-right: 1rem;
-  padding: 0.2em 0;
-  font-size: 0.8em;
 }
 
 .hbox {
