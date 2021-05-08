@@ -6,7 +6,7 @@ import useTimer from "easytimer-react-hook";
 import update from "immutability-helper";
 
 function App() {
-    const API_URL = "http://praj-aspire:8080";
+    const API_URL = process.env.REACT_APP_ORIGIN;
 
     const [view, setView] = useState("main");
     const [examList, setExamList] = useState([]);
