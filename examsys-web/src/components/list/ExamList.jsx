@@ -1,34 +1,43 @@
-function ExamList({examList}) {
-    function getExamCell(exam) {
+function ExamList({examList, startExam, deleteExam}) {
+    function onDeleteExam(exam, index) {
+        if (window.confirm(`Delete exam '${exam.name}'?`)) {
+            deleteExam(exam.id, index);
+        }
+    }
+
+    function getExamCell(exam, index) {
         return (
             <td className="cell-exam">
                 {exam.name}
                 <div className="exam-actions">
-                    <button>Start</button>
+                    <button onClick={() => startExam(exam.id)}>Start</button>
                     <button>Edit</button>
-                    <button>Delete</button>
+                    <button onClick={() => onDeleteExam(exam, index)}>Delete</button>
                 </div>
             </td>
         );
     }
 
     function getRows() {
-        return examList.map((item, index) => {
-            return (
-                <tr key={index} className="list-row">
-                    { getExamCell(item, index) }
-                    <td>{item.duration}</td>
-                    <td>{item.questions}</td>
-                </tr>
-            );
-        });
+        if (examList)
+            return examList.map((item, index) => {
+                return (
+                    <tr key={index} className="list-row">
+                        { getExamCell(item, index) }
+                        <td>{item.duration}</td>
+                        <td>{item.questions}</td>
+                    </tr>
+                );
+            });
+        else
+            return <tr><td>Loading ...</td></tr>;
     }
 
     return (
         <table className="exam-list">
             <thead>
                 <tr>
-                    <th class="column-exam">Exam</th>
+                    <th className="column-exam">Exam</th>
                     <th>Duration</th>
                     <th>Questions</th>
                 </tr>

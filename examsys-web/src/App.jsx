@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Header from "./components/Header";
-import MainView from "./components/MainView";
 import EditorView from "./components/EditorView";
 import ExamView from "./components/ExamView";
 import useTimer from "easytimer-react-hook";
@@ -11,19 +10,27 @@ function App() {
     const API_URL = process.env.REACT_APP_ORIGIN;
 
     const [view, setView] = useState("list");
-    const [examList, setExamList] = useState([]);
-
     const [exam, setExam] = useState();
     const [answers, setAnswers] = useState();
+
     const [score, setScore] = useState(-1);
     const [timer] = useTimer();
 
-    function setExamView() {
+    function setExamView(ex) {
+        setAnswers({
+            id: ex.id,
+            content: ex.content.map(sec => {
+                return {
+                    questions: sec.questions.map(() => { return {answer: 0}; })
+                };
+            })
+        });
+        setExam(ex);
         setView("exam");
     }
 
     function setMainView() {
-        setView("main");
+        setView("list");
         setExam(undefined);
         setAnswers(undefined);
         setScore(-1);
@@ -83,19 +90,6 @@ function App() {
         setEditorView();
     }
 
-    function deleteExam(examId, index) {
-        fetch(API_URL + "/exams/" + examId, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .catch(err => console.log(err))
-            .finally(() => {
-                setExamList(el => update(el, {$splice: [[index, 1]]}));
-            });
-    }
-
     function saveEditedExam() {
         let url = API_URL + "/exams";
         let method = "POST";
@@ -120,15 +114,8 @@ function App() {
         <div className="app">
             <Header />
 
-            { view === "list" && <ListView apiUrl={API_URL} /> }
-
-            { view === "main" && <MainView apiUrl={API_URL} 
-                                           examList={examList} 
-                                           setExamList={setExamList}
-                                           startExam={startExam}
-                                           editExam={editExam}
-                                           createExam={createExam}
-                                           deleteExam={deleteExam} /> }
+            { view === "list" && <ListView apiUrl={API_URL}
+                                           setExamView={setExamView} /> }
 
             { view === "exam" && <ExamView exam={exam}
                                            timer={timer}

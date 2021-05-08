@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Mulish&display=swap');
-
+/* COMMONS */
 :root {
   --primary-0: #C4FFF9;
   --primary-1: #68D8D6;
@@ -19,6 +18,20 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+button {
+  background-color: var(--primary-1);
+  color: white;
+  font-size: 0.8rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  border: 0;
+  border-radius: 4px;
+  padding: 0.3rem 0;
+}
+button:hover {
+  background-color: var(--primary-2);
 }
 
 .app {
@@ -63,20 +76,8 @@ code {
 .exam-list .list-row:hover {
   background-color: var(--primary-0);
 }
-
 .exam-list button {
-  background-color: var(--primary-1);
-  color: white;
-  font-size: 0.8em;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  border: 0;
-  border-radius: 4px;
-  padding: 0.3rem 0;
   width: 4.5rem;
-}
-.exam-list button:hover {
-  background-color: var(--primary-2);
 }
 
 /* LIST VIEW - CELL */
