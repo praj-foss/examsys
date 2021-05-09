@@ -23,27 +23,7 @@ function App() {
         setExam(ex);
         setView("editor");
     }
-
-    function saveEditedExam() {
-        let url = API_URL + "/exams";
-        let method = "POST";
-        
-        if (exam.id) {
-            url += "/" + exam.id;
-            method = "PUT";
-        }
-        
-        fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(exam)
-        })
-            .catch(err => console.log(err))
-            .finally(setListView);
-    }
-
+    
     return (
         <div className="app">
             <Header />
@@ -56,10 +36,10 @@ function App() {
                                            exam={exam}
                                            setListView={setListView} /> }
 
-            { view === "editor" && <EditorView exam={exam}
+            { view === "editor" && <EditorView apiUrl={API_URL}
+                                               exam={exam}
                                                setExam={setExam}
-                                               setMainView={setListView}
-                                               saveEditedExam={saveEditedExam} /> }
+                                               setListView={setListView} /> }
         </div>
     );
 }

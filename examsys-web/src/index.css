@@ -34,8 +34,13 @@ button {
 button:hover {
   background-color: var(--primary-2);
 }
+button.button-sm {
+  min-width: 4.5rem;
+  height: 1.5rem;
+}
 button.button-md {
-  width: 5rem;
+  min-width: 5rem;
+  padding: auto 1rem;
   height: 2rem;
 }
 
@@ -92,9 +97,6 @@ button.button-md {
   transition: 200ms;
   background-color: var(--primary-0);
 }
-.exam-list button {
-  width: 4.5rem;
-}
 
 /* LIST VIEW - CELL */
 .cell-exam {
@@ -137,11 +139,13 @@ button.button-md {
 .exam-header h2 {
   margin: 0.6rem 0 0.3rem 0;
 }
+.exam-header button {
+  margin-left: 1rem;
+}
 
 .exam-section {
   margin-bottom: 2rem;
 }
-
 .exam-question {
   border: 1px solid #888888;
   border-radius: 4px;
@@ -151,12 +155,17 @@ button.button-md {
 .exam-question p {
   margin-top: 0;
 }
-.exam-question 
 
-.score-view {
-  display: flex;
-  flex-direction: row;
+/* EDITOR VIEW */
+.editor-view .section-heading {
+  margin: 0.4rem 0;
 }
-.score-view button {
-  margin-left: 2rem;
+.section-heading ~ button {
+  margin-left: 1rem;
+}
+.exam-question button {
+  margin-bottom: 0.8rem;
+}
+.exam-question textarea {
+  margin-bottom: 0.8rem;
 }

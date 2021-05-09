@@ -92,7 +92,7 @@ const ExamView = ({apiUrl, exam, setListView}) => {
     function getScoreAndSubmit() {
         if (score !== -1) {
             return (
-                <div className="score-view hbox">
+                <div className="hbox">
                     <h2>Score: {score} </h2>
                     <button className="button-md" onClick={setListView}>Back</button>
                 </div>

@@ -10,9 +10,9 @@ function ExamList({examList, startExam, editExam, deleteExam, createExam}) {
             <td className="cell-exam">
                 {exam.name}
                 <div className="exam-actions">
-                    <button onClick={() => startExam(exam.id)}>Start</button>
-                    <button onClick={() => editExam(exam.id)}>Edit</button>
-                    <button onClick={() => onDeleteExam(exam, index)}>Delete</button>
+                    <button className="button-sm" onClick={() => startExam(exam.id)}>Start</button>
+                    <button className="button-sm" onClick={() => editExam(exam.id)}>Edit</button>
+                    <button className="button-sm" onClick={() => onDeleteExam(exam, index)}>Delete</button>
                 </div>
             </td>
         );
@@ -47,7 +47,7 @@ function ExamList({examList, startExam, editExam, deleteExam, createExam}) {
             </tbody>
             <tfoot>
                 <tr>
-                    <td><button onClick={createExam}>Create</button></td>
+                    <td><button className="button-sm" onClick={createExam}>Create</button></td>
                 </tr>
             </tfoot>
         </table>
