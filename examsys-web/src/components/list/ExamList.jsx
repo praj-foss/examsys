@@ -1,4 +1,4 @@
-function ExamList({examList, startExam, deleteExam}) {
+function ExamList({examList, startExam, editExam, deleteExam, createExam}) {
     function onDeleteExam(exam, index) {
         if (window.confirm(`Delete exam '${exam.name}'?`)) {
             deleteExam(exam.id, index);
@@ -11,7 +11,7 @@ function ExamList({examList, startExam, deleteExam}) {
                 {exam.name}
                 <div className="exam-actions">
                     <button onClick={() => startExam(exam.id)}>Start</button>
-                    <button>Edit</button>
+                    <button onClick={() => editExam(exam.id)}>Edit</button>
                     <button onClick={() => onDeleteExam(exam, index)}>Delete</button>
                 </div>
             </td>
@@ -47,7 +47,7 @@ function ExamList({examList, startExam, deleteExam}) {
             </tbody>
             <tfoot>
                 <tr>
-                    <td><button>Create</button></td>
+                    <td><button onClick={createExam}>Create</button></td>
                 </tr>
             </tfoot>
         </table>
