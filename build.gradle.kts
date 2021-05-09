@@ -40,7 +40,13 @@ java {
     targetCompatibility = JavaVersion.toVersion("11")
 }
 
+val buildClient = tasks.register<Exec>("buildClient") {
+    workingDir(projectDir.resolve("examsys-web"))
+    commandLine("npm", "run", "build")
+}
+
 val copyClient = tasks.register<Copy>("copyClient") {
+    dependsOn(buildClient)
     doFirst {
         mkdir(buildDir.resolve("resources/main/www"))
     }
