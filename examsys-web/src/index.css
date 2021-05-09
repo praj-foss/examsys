@@ -34,6 +34,19 @@ button {
 button:hover {
   background-color: var(--primary-2);
 }
+button.button-md {
+  width: 5rem;
+  height: 2rem;
+}
+
+.hbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.hbox.space-between {
+  justify-content: space-between;
+}
 
 .app {
   max-width: 80%;
@@ -108,16 +121,21 @@ button:hover {
   margin-right: 1rem;
 }
 
-.hbox {
-  display: flex;
-  flex-direction: row;
-}
-.hbox.space-between {
-  justify-content: space-between;
-}
-
+/* EXAM VIEW */
 .exam-header {
-  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+}
+.exam-header .hbox {
+  background-color: white;
+}
+.exam-header .header-gradient {
+  height: 1rem;
+  width: 100%;
+  background-image: linear-gradient(white, transparent);
+}
+.exam-header h2 {
+  margin: 0.6rem 0 0.3rem 0;
 }
 
 .exam-section {
@@ -130,10 +148,10 @@ button:hover {
   margin: 1rem auto;
   padding: 1rem;
 }
-
-.exam-question {
-  margin-bottom: 1rem;
+.exam-question p {
+  margin-top: 0;
 }
+.exam-question 
 
 .score-view {
   display: flex;

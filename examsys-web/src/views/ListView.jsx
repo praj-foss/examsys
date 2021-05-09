@@ -4,6 +4,7 @@ import ExamList from "../components/list/ExamList";
 
 function ListView({apiUrl, setExamView, setEditorView}) {
     const [examList, setExamList] = useState();
+    
     useEffect(() => {
         fetch(apiUrl + "/exams")
                 .then(data => data.json())
